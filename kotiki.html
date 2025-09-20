@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архив интервью</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a6cf7;
+            --primary-light: #6f87ff;
+            --secondary: #8e6cf7;
+            --light: #ffffff;
+            --light-gray: #f8fafc;
+            --border: #e2e8f0;
+            --text: #334155;
+            --text-light: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: var(--light-gray);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: var(--light);
+            color: var(--text);
+            padding: 25px 20px;
+            text-align: center;
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .admin-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(74, 108, 247, 0.25);
+        }
+        
+        .admin-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(74, 108, 247, 0.3);
+        }
+        
+        .search-section {
+            background: var(--light);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+        
+        .search-container {
+            display: flex;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        #searchInput {
+            padding: 16px 24px;
+            flex-grow: 1;
+            border: 2px solid var(--border);
+            border-radius: 10px 0 0 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: var(--light);
+            color: var(--text);
+        }
+        
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+        }
+        
+        #searchInput::placeholder {
+            color: var(--text-light);
+        }
+        
+        #searchButton {
+            padding: 16px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        #searchButton:hover {
+            background: var(--primary-light);
+        }
+        
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+        
+        .tag {
+            background: var(--light);
+            color: var(--primary);
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tag:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(74, 108, 247, 0.2);
+        }
+        
+        .interview-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .interview-item {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .interview-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .interview-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .interview-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text);
+            line-height: 1.4;
+        }
+        
+        .interview-description {
+            margin-bottom: 20px;
+            color: var(--text-light);
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+        
+        .interview-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .interview-tag {
+            background: rgba(78, 108, 247, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(78, 108, 247, 0.2);
+        }
+        
+        .interview-tag:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .interview-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            gap: 15px;
+        }
+        
+        .interview-links a {
+            flex: 1;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        .interview-links a.vk {
+            background: var(--primary);
+        }
+        
+        .interview-links a.tg {
+            background: #2aabee;
+        }
+        
+        .interview-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+            opacity: 0.9;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 40px;
+            font-size: 18px;
+            color: var(--text-light);
+            grid-column: 1 / -1;
+            background: var(--light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .no-results i {
+            font-size: 64px;
+            color: var(--border);
+            margin-bottom: 20px;
+        }
+        
+        .no-results h3 {
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        .highlight {
+            background: rgba(247, 220, 111, 0.3);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .results-count {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--text-light);
+            font-size: 16px;
+        }
+        
+        .results-count span {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .interview-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            #searchInput {
+                border-radius: 10px;
+                margin-bottom: 15px;
+            }
+            
+            #searchButton {
+                border-radius: 10px;
+                justify-content: center;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                padding: 0 30px;
+            }
+            
+            .admin-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 15px auto 0;
+                display: inline-flex;
+                width: auto;
+            }
+            
+            .interview-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-microphone-alt"></i> Архив интервью</h1>
+            <a href="admin.html" class="admin-btn"><i class="fas fa-cog"></i> Админ-панель</a>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="search-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Введите ключевые слова для поиска...">
+                <button id="searchButton"><i class="fas fa-search"></i> Поиск</button>
+            </div>
+            
+            <div class="tags-container">
+                <div class="tag" data-tag="Чёрное сердце">Чёрное сердце</div>
+                <div class="tag" data-tag="Зимородок">Зимородок</div>
+                <div class="tag" data-tag="Ночная сказка">Ночная сказка</div>
+                <div class="tag" data-tag="Лейла">Лейла</div>
+                <div class="tag" data-tag="Бахар">Бахар</div>
+                <div class="tag" data-tag="Двухместный номер">Двухместный номер</div>
+                <div class="tag" data-tag="Дикий">Дикий</div>
+                <div class="tag" data-tag="Семья">Семья</div>
+                <div class="tag" data-tag="Если сильно полюбишь">Если сильно полюбишь</div>
+                <div class="tag" data-tag="Основание осман">Основание осман</div>
+                <div class="tag" data-tag="За запретный плод">Запретный плод</div>
+                <div class="tag" data-tag="Струны Души">Струны Души</div>
+                <div class="tag" data-tag="то что не будут просить">то что не будут просить</div>
+                <div class="tag" data-tag="Сердцебиение">Сердцебиение</div>
+            </div>
+        </section>
+        
+        <div class="results-count" id="resultsCount">Найдено интервью: <span>0</span></div>
+        
+        <div class="interview-list" id="interviewList">
+            <!-- Интервью будут добавлены через JavaScript -->
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2023 Архив интервью. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Функция для загрузки интервью
+        function loadInterviews() {
+            const savedInterviews = localStorage.getItem('interviews');
+            if (savedInterviews) {
+                return JSON.parse(savedInterviews);
+            }
+            
+            // Возвращаем стандартный набор, если в localStorage ничего нет
+            return [
+                {
+                    title: "Эксклюзивное интервью с Керемом Бюрсином — только для Иви 😍🔥",
+                    description: "",
+                    link1: "https://vk.com/wall-221529593_72367",
+                    link2: "https://t.me/ivi_turk/5604",
+                    keywords: ["Керем Бюрсин", "Постучись в мою дверь", "Интервью", "Сердцебиение"]
+                },
+                {
+                    title: "Блиц-опрос с Арасом Айдыном и Лейлой Танлар",
+                    description: "Актеры рассказывают о своих персонажах в сериале 'Чёрное сердце' и делятся закулисными историями.",
+                    link1: "https://vk.com/wall-221529593_65725",
+                    link2: "https://t.me/ivi_turk/5316",
+                    keywords: ["Чёрное сердце", "Арас Айдын", "Лейла Танлар", "Блиц-опрос"]
+                },
+                {
+                    title: "Блиц-опрос с Хафсанур Санджактутан и Бураком Тозкопараном!",
+                    description: "Главные актеры сериала 'Чёрное сердце' отвечают на вопросы о своих персонажах и съемочном процессе.",
+                    link1: "https://vk.com/wall-221529593_59989",
+                    link2: "https://t.me/ivi_turk/4996",
+                    keywords: ["Чёрное сердце", "Хафсанур Санджактутан", "Бурак Тозкопараном", "Блиц-опрос"]
+                },
+                {
+                    title: "Интервью с Арасом Айдыном",
+                    description: "Актер рассказывает о своей роли в сериале 'Чёрное сердце' и делится впечатлениями о работе.",
+                    link1: "https://vk.com/wall-221529593_63276",
+                    link2: "https://t.me/ivi_turk/5217",
+                    keywords: ["Чёрное сердце", "Интервью", "Арас Айдын"]
+                },
+                {
+                    title: "Интервью с Эдже Услу",
+                    description: "Актриса рассказывает о своей роли в сериале 'Чёрное сердце' и делится закулисными историями.",
+                    link1: "https://vk.com/wall-221529593_62703",
+                    link2: "https://t.me/ivi_turk/5186",
+                    keywords: ["Чёрное сердце", "Интервью", "Эдже Услу"]
+                },
+                {
+                    title: "Интервью от Лейлы Танлар!",
+                    description: "Актриса делится впечатлениями о съемках в сериале 'Чёрное сердце' и своем персонаже.",
+                    link1: "https://vk.com/wall-221529593_60773",
+                    link2: "https://t.me/ivi_turk/5064",
+                    keywords: ["Чёрное сердце", "Лейла Танлар", "Интервью"]
+                },
+                {
+                    title: "Хафсанур Санджактутан и Бурак Тозкопаран пробуют российские сладости",
+                    description: "Актеры сериала 'Чёрное сердце' дегустируют российские сладости и делятся впечатлениями.",
+                    link1: "https://vk.com/wall-221529593_67310",
+                    link2: "https://t.me/ivi_turk/5391",
+                    keywords: ["Чёрное сердце", "Хафсанур Санджактутан", "Бурак Тозкопаaran", "Еда"]
+                },
+                {
+                    title: "Интервью с Хюлья Дуяр",
+                    description: "Актриса рассказывает о своей роли в сериале 'Зимородок' и съемочном процессе.",
+                    link1: "https://vk.com/wall-221529593_55687",
+                    link2: "https://t.me/ivi_turk/4629",
+                    keywords: ["Зимородок", "Хюлья Дуяр", "Интервью"]
+                },
+                {
+                    title: "Интервью с Эмре Алтугом",
+                    description: "Актер рассказывает о своей роли в сериале 'Зимородок' и делится закулисными историями.",
+                    link1: "https://vk.com/wall-221529593_55316",
+                    link2: "https://t.me/ivi_turk/4583",
+                    keywords: ["Зимородок", "Эмре Алтуг", "Интервью"]
+                },
+                {
+                    title: "Интервью с Гёзде Кансу",
+                    description: "Актриса рассказывает о своей роли в сериале 'Зимородок' и делится впечатлениями о работе.",
+                    link1: "https://vk.com/wall-221529593_54975",
+                    link2: "https://t.me/ivi_turk/4536",
+                    keywords: ["Зимородок", "Гёзде Кансу", "Интервью"]
+                },
+                {
+                    title: "Интервью с Берил Позам",
+                    description: "Актриса рассказывает о своей роли в сериале 'Зимородок' и съемочном процессе.",
+                    link1: "https://vk.com/wall-221529593_53901",
+                    link2: "https://t.me/ivi_turk/4328",
+                    keywords: ["Зимородок", "Берил Позам", "Интервью"]
+                },
+                {
+                    title: "Интервью с Диреном Полатогуллари (Казымом Агой)",
+                    description: "Актер рассказывает о своей роли в сериале 'Зимородок' и делится закулисными историями.",
+                    link1: "https://vk.com/wall-221529593_53025",
+                    link2: "https://t.me/ivi_turk/4410",
+                    keywords: ["Зимородок", "Дирена Полатогуллари", "Казыма Аги", "Интервью"]
+                },
+                {
+                    title: "Интервью с Онуром Гювенатамом",
+                    description: "Актер рассказывает о своей роли в сериале 'Зимородок' и делится впечатлениями о работе.",
+                    link1: "https://vk.com/wall-221529593_38059",
+                    link2: "https://t.me/ivi_turk/3398",
+                    keywords: ["Зимородок", "Онур Гювенатам", "Интервью"]
+                },
+                {
+                    title: "Блиц-опрос с Бураком Денизом и Су Бурджу Язгы Джошкун",
+                    description: "Актеры сериала 'Ночная сказка' отвечают на вопросы о своих персонажах и съемочном процессе.",
+                    link1: "https://vk.com/wall-221529593_40132",
+                    link2: "https://t.me/ivi_turk/3516",
+                    keywords: ["Ночная сказка", "Бурак Дениз", "Су Бурджу Язгы Джошкун", "Блиц-опрос"]
+                },
+                {
+                    title: "Интервью с Бураком Денизом и Су Бурджу Джошкун",
+                    description: "Главные актеры сериала 'Ночная сказка' рассказывают о своих ролях и съемочном процессе. ТОЛЬКО ВК",
+                    link1: "https://vk.com/wall-221529593_45426",
+                    link2: "",
+                    keywords: ["Ночная сказка", "Бурак Дениз", "Су Бурджу Джошкун", "Интервью"]
+                },
+                {
+                    title: "Блиц-опрос с Джемре Байсел",
+                    description: "Актриса рассказывает о своей роли в сериале 'Лейла' и делится закулисными историями. ТОЛЬКО ВК",
+                    link1: "https://vk.com/wall-221529593_38431",
+                    link2: "",
+                    keywords: ["Лейла", "Джемре Байсел", "Блиц-опрос"]
+                },
+                {
+                    title: "Интервью с режиссёром Хилал Сарал и оператором Неджо Акдениз",
+                    description: "Создатели сериала 'Лейла' рассказывают о работе над проектом и творческом процессе.",
+                    link1: "https://vk.com/wall-221529593_48374",
+                    link2: "https://t.me/ivi_turk/3956",
+                    keywords: ["Лейла", "Хилал Сарал", "Неджо Акденииз", "Режиссер", "Оператор", "Интервью"]
+                },
+                {
+                    title: "Интервью с Бугрой Гюльсой",
+                    description: "Актер рассказывает о своей роли в сериале 'Бахар' и делится впечатлениями о работе. ТОЛЬКО ВК",
+                    link1: "https://vk.com/wall-221529593_21701",
+                    link2: "",
+                    keywords: ["Бахар", "Бугра Гюльсой", "Интервью"]
+                },
+                {
+                    title: "Интервью с Демет Эвгар",
+                    description: "Актриса рассказывает о своей роли в сериале 'Бахар' и делится закулисными историями.",
+                    link1: "https://vk.com/wall-221529593_21253",
+                    link2: "https://t.me/ivi_turk/1777",
+                    keywords: ["Бахар", "Демет Эвgar", "Интервью"]
+                },
+                {
+                    title: "Блиц-опрос с Улашем Туной Астапе",
+                    description: "Актер рассказывает о своей роли в сериале 'Двухместный номер' и съемочном процессе. ТОЛЬКО ВК",
+                    link1: "https://vk.com/wall-221529593_62627",
+                    link2: "",
+                    keywords: ["Двухместный номер", "Улаш Туна Астапе", "Блиц-опрос"]
+                },
+                {
+                    title: "Интервью с Халитом Озгюром Сари и Бертаном Асллани",
+                    description: "Актеры рассказывают о своих ролях в сериале 'Дикий' и делятся закулисными историями. ТОЛЬКО ВК",
+                    link1: "https://vk.com/wall-221529593_30282",
+                    link2: "",
+                    keywords: ["Дикий", "Халит Озгюр Сари", "Бертан Асллани", "Интервью"]
+                },
+                {
+                    title: "Интервью с Серенай Сарыкая",
+                    description: "Актриса рассказывает о своей роли в сериале 'Семья' и делится впечатлениями о работе. ТОЛЬКО ВК",
+                    link1: "https://vk.com/wall-221529593_8535",
+                    link2: "",
+                    keywords: ["Семья", "Серенай Сарыкая", "Интервью"]
+                },
+                {
+                    title: "Интервью с режиссёром Али Билгином и актрисой Хафсанур Санджактутан",
+                    description: "Создатели сериала 'Если сильно полюбишь' рассказывают о работе над проектом и творческом процессе.",
+                    link1: "https://vk.com/wall-221529593_2533",
+                    link2: "https://t.me/ivi_turk/189",
+                    keywords: ["Если сильно полюбишь", "Али Билгин", "Хафsanur Санджактутан", "Режиссер", "Интервью"]
+                },
+                {
+                    title: "Интервью с Озге Торер",
+                    description: "Актриса рассказывает о своей роли в сериале 'Основание Осман' и делится закулисными историями.",
+                    link1: "https://vk.com/wall-221529593_1882",
+                    link2: "https://t.me/ivi_turk/139",
+                    keywords: ["Основание осман", "Озге Торер", "Интервью"]
+                },
+                {
+                    title: "Интервью с Шевваль Сам",
+                    description: "Актриса рассказывает о своей роли в сериале 'Запретный плод' и делится впечатлениями о работе.",
+                    link1: "https://vk.com/wall-221529593_280",
+                    link2: "https://t.me/ivi_turk/39",
+                    keywords: ["Запретный плод", "Шевваль Сам", "Интервью"]
+                },
+                {
+                    title: "Интервью с Али Ягызом Дурмушем",
+                    description: "Актер рассказывает о своей роли в сериале 'Струны Души' и съемочном процессе.",
+                    link1: "https://vk.com/wall-221529593_69359",
+                    link2: "https://t.me/ivi_turk/5452",
+                    keywords: ["Струны Души", "Али Ягыз Дурмуш", "Интервью"]
+                },
+                {
+                    title: "Интервью с Юсуфом Пирхасаном",
+                    description: "Создатель главных летных хитов турдизи рассказывает о своем творчестве и музыкальном процессе.",
+                    link1: "https://vk.com/wall-221529593_68421",
+                    link2: "https://t.me/ivi_turk/5431",
+                    keywords: ["Юсуф Пирхасан", "Создатель хитов", "Интервью"]
+                },
+                {
+                    title: "Интервью с Сабиной и Ксенией Бородиной",
+                    description: "💩",
+                    link1: "https://vk.com/wall-221529593_31141",
+                    link2: "https://t.me/ivi_turk/2689",
+                    keywords: ["то что не будут просить", "Сабина", "Ксения Бородина", "Интервью"]
+                }
+            ];
+        }
+
+        // Данные интервью
+        let interviews = loadInterviews();
+
+        // Функция для отображения интервью
+        function displayInterviews(interviewsToShow) {
+            const interviewList = document.getElementById('interviewList');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            resultsCount.querySelector('span').textContent = interviewsToShow.length;
+            
+            interviewList.innerHTML = '';
+            
+            if (interviewsToShow.length === 0) {
+                interviewList.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>По вашему запросу ничего не найдено</h3>
+                        <p>Попробуйте изменить поисковый запрос или выберите одну из категорий выше</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            interviewsToShow.forEach(interview => {
+                const interviewElement = document.createElement('div');
+                interviewElement.className = 'interview-item';
+                
+                // Создаем элементы тегов для интервью
+                const tagsHtml = interview.keywords.map(keyword => 
+                    `<div class="interview-tag" data-tag="${keyword}">${keyword}</div>`
+                ).join('');
+                
+                // Проверяем, нужно ли показывать кнопку ТГ
+                const showTg = interview.link2 && !interview.description.includes('ТОЛЬКО ВК');
+                
+                interviewElement.innerHTML = `
+                    <div class="interview-title">${interview.title}</div>
+                    <div class="interview-description">${interview.description}</div>
+                    <div class="interview-tags">${tagsHtml}</div>
+                    <div class="interview-links">
+                        <a href="${interview.link1}" target="_blank" class="vk"><i class="fab fa-vk"></i> ВКонтакте</a>
+                        ${showTg ? `<a href="${interview.link2}" target="_blank" class="tg"><i class="fab fa-telegram"></i> Telegram</a>` : ''}
+                    </div>
+                `;
+                interviewList.appendChild(interviewElement);
+            });
+            
+            // Добавляем обработчики событий для тегов внутри карточек
+            document.querySelectorAll('.interview-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const tagValue = this.getAttribute('data-tag');
+                    document.getElementById('searchInput').value = tagValue;
+                    performSearch();
+                });
+            });
+        }
+
+        // Функция для поиска
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm.trim() === '') {
+                displayInterviews(interviews);
+                return;
+            }
+            
+            const filteredInterviews = interviews.filter(interview => {
+                // Поиск по ключевым словам, заголовку и описанию
+                return interview.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm)) ||
+                       interview.title.toLowerCase().includes(searchTerm) ||
+                       interview.description.toLowerCase().includes(searchTerm);
+            });
+            
+            // Подсветка результатов
+            const highlightedInterviews = filteredInterviews.map(interview => {
+                const highlighted = {...interview};
+                
+                // Подсветка в заголовке
+                if (highlighted.title.toLowerCase().includes(searchTerm)) {
+                    highlighted.title = highlighted.title.replace(
+                        new RegExp(searchTerm, 'gi'), 
+                        match => `<span class="highlight">${match}</span>`
+                    );
+                }
+                
+                // Подсветка в описании
+                if (highlighted.description.toLowerCase().includes(searchTerm)) {
+                    highlighted.description = highlighted.description.replace(
+                        new RegExp(searchTerm, 'gi'), 
+                        match => `<span class="highlight">${match}</span>`
+                    );
+                }
+                
+                return highlighted;
+            });
+            
+            displayInterviews(highlightedInterviews);
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            // Загружаем актуальные интервью
+            interviews = loadInterviews();
+            displayInterviews(interviews);
+            
+            // Добавляем обработчик события для поиска по кнопке
+            document.getElementById('searchButton').addEventListener('click', performSearch);
+            
+            // Добавляем обработчик события для поиска при вводе
+            document.getElementById('searchInput').addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Добавляем обработчики событий для тегов
+            document.querySelectorAll('.tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const tagValue = this.getAttribute('data-tag');
+                    document.getElementById('searchInput').value = tagValue;
+                    performSearch();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
